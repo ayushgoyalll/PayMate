@@ -8,6 +8,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 function Signin()
 {
+    const url=import.meta.env.VITE_BACKEND;
     const[username,setUsername] = useState("");
     const[password,setPassword] = useState("");
     const navigate = useNavigate();
@@ -29,7 +30,7 @@ function Signin()
         } label={"Password"} placeholder={"12345"}></InputBox> 
         <Button onClick={ async() =>
             {
-              const response = await  axios.post("http://localhost:3000/api/v1/user/signin",{
+              const response = await  axios.post(`${url}/api/v1/user/signin`,{
                     username,
                     password
                 });

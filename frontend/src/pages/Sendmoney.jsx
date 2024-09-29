@@ -4,6 +4,7 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 export default function Sendmoney() {
+    const url=import.meta.env.VITE_BACKEND;
     const [searchParams] = useSearchParams();
     const [amount, setAmount] = useState(0);
     const navigate = useNavigate();
@@ -12,7 +13,7 @@ export default function Sendmoney() {
 
     const handleTransfer = () => {
         axios.post(
-            "http://localhost:3000/api/v1/account/transfer",
+            `${url}/api/v1/account/transfer`,
             {
                 to: id,
                 amount: parseFloat(amount), // Parse amount to ensure it's a number

@@ -8,6 +8,7 @@ import { Subheading } from "../components/Subheading";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 function Signup() {
+    const url=import.meta.env.VITE_BACKEND;
     const [firstname, setFirstname] = useState("");
     const [lastname, setLastname] = useState("");
     const [username, setUsername] = useState("");
@@ -25,7 +26,7 @@ function Signup() {
                     <InputBox onChange={e => { setPassword(e.target.value) }} label={"Password"} placeholder={"123456"} ></InputBox>
                     <Button onClick={async () => {
                         try {
-                            const response = await axios.post("http://localhost:3000/api/v1/user/signup", {
+                            const response = await axios.post(`${url}/api/v1/user/signup`, {
                                 username,
                                 firstname,
                                 lastname,

@@ -4,11 +4,12 @@ import { Button } from "../components/Button";
 import axios from "axios";
 
 export const Users = () => {
+    const url=import.meta.env.VITE_BACKEND;
     const [users, setUsers] = useState([]);
     const [filter,setFilter] = useState("");
  //   const [current,setCurrent]=useState(0);
     useEffect(() => {
-        axios.get("http://localhost:3000/api/v1/user/bulk?filter=" + filter)
+        axios.get(`${url}/api/v1/user/bulk?filter=${filter}`)
             .then(response => {
                 // Assuming response.data.user is an array of user objects
                 const sortedUsers = response.data.user.sort((a, b) => a.firstname.localeCompare(b.firstname));
