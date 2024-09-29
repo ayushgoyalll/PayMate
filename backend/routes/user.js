@@ -25,14 +25,17 @@ router.post("/signup",async (req,res) =>
             message:"email already taken/incorrect inputs"
         })
     }
+    console.log("finding the user");
     const user = await User.findOne({
         username:body.username
     })
+    console.log("user does not  exist");
     if(user){
         return res.json({
             message:"email already taken"
         })
     }
+    console.log("creating the user");
     try{
     const dbUser =await User.create(body);
     const userId =dbUser._id;
@@ -40,10 +43,12 @@ router.post("/signup",async (req,res) =>
         userId,
         balance: Math.round(1 + Math.random() * 10000)
     })
+    console.log("generating the token");
 
     const token = jwt.sign({
         userId: dbUser._id
     },JWT_SECRET);
+    console.log("output:");
 
     return     res.json({
             message:"user created successfully",
@@ -60,6 +65,27 @@ router.post("/signup",async (req,res) =>
 const signinBody = zod.object({
     username: zod.string().email(),
 	password: zod.string()
+})
+
+
+// make a get request that will take the token from the frontend, and will send userid and name along
+
+router.get("/getName",authMiddleware,async(req,res)=>{
+ try{
+   const user = await User.findOne({
+        _id:req.userId
+    })
+    if(!user){
+        return res.json({userId:-1});
+    }
+    return res.json({userId:req.userId,username:user.firstname});
+
+}
+catch(e){
+    console.log(error);
+    return res.json({err:error});
+}
+
 })
 
 router.post("/signin", async (req, res) => {
@@ -108,6 +134,30 @@ router.put("/update", authMiddleware, async (req, res) => {
 	
     res.json({
         message: "Updated successfully"
+    })
+})
+router.get("/bulk", async (req, res) => {
+    const filter = req.query.filter || "";
+
+    const users = await User.find({
+        $or: [{
+            firstname: {
+                "$regex": filter, "$options": "i"
+            }
+        }, {
+            lastname: {
+            "$regex": filter, "$options": "i"
+            }
+        }]
+    })
+
+    res.json({
+        user: users.map(user => ({
+            username: user.username,
+            firstname: user.firstname,
+            lastname: user.lastname,
+            _id: user._id
+        }))
     })
 })
 
