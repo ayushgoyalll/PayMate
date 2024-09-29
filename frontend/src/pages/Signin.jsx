@@ -35,6 +35,8 @@ function Signin()
                     password
                 });
                 localStorage.setItem("token", response.data.token);
+                localStorage.setItem("name", response.data.name);
+                
                 navigate("/dashboard"); 
             }
         } label={"Sign in"}></Button>
