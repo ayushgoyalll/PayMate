@@ -34,7 +34,7 @@ function Signup() {
                             });
                             console.log(response.data.message);
                             localStorage.setItem("token", response.data.token);
-                                navigate("/dashboard"); 
+                                navigate("/signin"); 
                         } catch (error) {
                             console.error("Error during signup:", error);
                             alert("Signup failed. Please try again.");
